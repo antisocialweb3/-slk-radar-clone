@@ -47,6 +47,11 @@
 <section class="panel"><div class="panel-head"><div><h2>Working detection rules</h2><p>Transparent, adjustable heuristics for the first version.</p></div></div><div class="panel-body"><ul class="rule-list"><li><b>A-shape:</b> a local peak relative to neighbouring candles; candidate zone is that pivot candle's open–close body.</li><li><b>V-shape:</b> a local trough relative to neighbouring candles; candidate zone is that pivot candle's open–close body.</li><li><b>Open-Close:</b> a comparatively large candle body versus recent bodies; its open–close body becomes a candidate zone.</li><li><b>Line mode:</b> finds peaks/troughs using closing prices, then marks the pivot candle's body zone.</li><li>Candidate proximity is measured against the latest returned candle close. Historical zones are not proof of a future rejection.</li></ul></div></section>
 <section class="panel"><div class="panel-head"><div><h2>Important limitations</h2></div></div><div class="panel-body"><ul class="rule-list"><li>These are provisional computational interpretations. They may not match every nuance of your personal SLK examples yet.</li><li>The feed refreshes only when you load/refresh it; this is not a tick-by-tick streaming feed.</li><li>No buy/sell calls, stop-losses, targets, or guaranteed rejections are generated.</li><li>Do not use the output for live trading until the detected zones have been compared against your chart examples and back-tested.</li></ul></div></section>
 </div>
+<section class="panel" id="fvgPanel">
+<div class="panel-head"><div><h2>FVG + Key-Level Confluence</h2><p>Three-candle gaps are detected from candle wicks; overlap with a candidate key-level body zone is shown separately.</p></div><span class="pill oc" id="fvgCount">Waiting for data</span></div>
+<div class="table-wrap"><table><thead><tr><th>FVG</th><th>Gap range</th><th>Formed</th><th>Overlapping key level</th><th>Rule status</th></tr></thead><tbody id="fvgRows"><tr><td colspan="5" class="empty">Load candles to scan three-candle imbalances.</td></tr></tbody></table></div>
+<div class="panel-body"><p class="help">This scan identifies bullish/bearish three-candle FVG geometry and candidate-level overlap. It does not yet call an FVG “filled” based on a reaction, nor confirm nearby liquidity or external-break confirmation automatically; those require the remaining exact rules.</p></div>
+</section>
 <section class="panel" id="slkRulebook">
 <div class="panel-head"><div><h2>SLK Method Rulebook</h2><p>Rules captured from your method so far. Detection remains provisional until the remaining definitions are confirmed.</p></div><span class="pill v">RULES IN PROGRESS</span></div>
 <div class="panel-body">
@@ -72,7 +77,7 @@
 </main>
 <script>
 const $=id=>document.getElementById(id);
-let candles=[],levels=[],lastPrice=null;
+let candles=[],levels=[],imbalances=[],lastPrice=null;
 const fmt=(n,d=2)=>Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function setMessage(text,type=""){const el=$("connectionMessage");el.className="notice"+(type?" "+type:"");el.textContent=text}
@@ -100,6 +105,30 @@ function analyze(data,mode){
  const dedup=new Map();for(const x of out){const key=[x.type,x.index].join("-");dedup.set(key,x)}
  return [...dedup.values()].sort((a,b)=>b.index-a.index).slice(0,100);
 }
+function scanImbalances(data, keyLevels){
+ const found=[];
+ for(let i=2;i<data.length;i++){
+  const first=data[i-2],third=data[i];
+  let direction="",low=0,high=0;
+  if(first.high<third.low){direction="Bullish";low=first.high;high=third.low}
+  else if(first.low>third.high){direction="Bearish";low=third.high;high=first.low}
+  else continue;
+  const overlaps=keyLevels.filter(l=>l.high>=low&&l.low<=high);
+  found.push({direction,low,high,date:third.datetime,index:i,overlaps});
+ }
+ return found.sort((a,b)=>b.index-a.index).slice(0,100);
+}
+function renderImbalances(){
+ const count=$("fvgCount"),tbody=$("fvgRows");
+ count.textContent=imbalances.length+" FVGs detected";
+ if(!imbalances.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No three-candle FVGs found in the loaded candles.</td></tr>';return}
+ tbody.innerHTML=imbalances.slice(0,50).map(g=>{
+  const overlap=g.overlaps.length?g.overlaps.map(l=>l.type+" ("+fmt(l.low,2)+"–"+fmt(l.high,2)+")").join(", "):"None detected";
+  const cls=g.direction==="Bullish"?"v":"a";
+  const status=g.overlaps.length?"Candidate overlap — reaction/liquidity still to verify":"No candidate key-level overlap";
+  return '<tr><td><span class="pill '+cls+'">'+g.direction+'</span></td><td class="level">'+fmt(g.low,2)+" – "+fmt(g.high,2)+'</td><td>'+esc(g.date)+'</td><td>'+esc(overlap)+'</td><td class="muted">'+esc(status)+'</td></tr>';
+ }).join("");
+}
 function renderChart(){
  if(!candles.length){$("chart").innerHTML='<div class="empty">Your XAU/USD chart will appear here after a successful data load.</div>';return}
  const w=1000,h=300,pad={l:58,r:22,t:20,b:30};const vals=candles.map(c=>c.close),min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
@@ -126,7 +155,7 @@ function renderAll(){
  $("metricNearest").textContent=near?fmt((near.low+near.high)/2,2):"—";$("metricNearestNote").textContent=near?near.type+" candidate":"No candidates found";
  $("chartSubtitle").textContent=candles.length+" candles · "+$("interval").selectedOptions[0].text+" · lines show candidate body-zone midpoints";
  $("dataBadge").textContent="DATA LOADED · "+$("interval").value.toUpperCase();$("dataBadge").style.borderColor="#1c5946";$("dataBadge").style.color="#9df0ce";
- renderChart();renderLevels();
+ renderChart();renderLevels();renderImbalances();
 }
 async function connect(){
  const key=$("apiKey").value.trim();
@@ -145,7 +174,7 @@ async function connect(){
   }
   const parsed=payload.values.map(v=>({datetime:v.datetime,open:Number(v.open),high:Number(v.high),low:Number(v.low),close:Number(v.close)})).filter(c=>[c.open,c.high,c.low,c.close].every(Number.isFinite)).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
   if(parsed.length<10)throw new Error("The provider returned fewer than 10 usable candles. Try another timeframe or check symbol access.");
-  candles=parsed;levels=analyze(candles,$("pivotMode").value);renderAll();
+  candles=parsed;levels=analyze(candles,$("pivotMode").value);imbalances=scanImbalances(candles,levels);renderAll();
   setMessage("Loaded "+candles.length+" candles from Twelve Data. Last candle close: "+fmt(candles[candles.length-1].close,2)+". This may be delayed and is not a tick-by-tick quote.","success");
   status("Market data loaded",true);$("refreshBtn").disabled=false;$("debugMessage").className="notice success";$("debugMessage").textContent="Success: button, JavaScript and API request are working.";
  }catch(err){setMessage("Could not load XAU/USD: "+err.message,"error");status("Data connection needs attention");$("debugMessage").className="notice error";$("debugMessage").textContent="Request failed: "+err.message}
@@ -154,7 +183,7 @@ async function connect(){
 window.addEventListener("error",e=>{const msg="Page script error: "+(e.message||"unknown error");const d=$("debugMessage");if(d)d.textContent=msg;});
 $("connectBtn").addEventListener("click",connect);$("refreshBtn").addEventListener("click",connect);
 $("shapeFilter").addEventListener("change",renderLevels);
-$("pivotMode").addEventListener("change",()=>{if(candles.length){levels=analyze(candles,$("pivotMode").value);renderAll()}});
+$("pivotMode").addEventListener("change",()=>{if(candles.length){levels=analyze(candles,$("pivotMode").value);imbalances=scanImbalances(candles,levels);renderAll()}});
 $("interval").addEventListener("change",()=>{if(candles.length)connect()});
 loadSavedKey();
 </script>
