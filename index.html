@@ -47,6 +47,27 @@
 <section class="panel"><div class="panel-head"><div><h2>Working detection rules</h2><p>Transparent, adjustable heuristics for the first version.</p></div></div><div class="panel-body"><ul class="rule-list"><li><b>A-shape:</b> a local peak relative to neighbouring candles; candidate zone is that pivot candle's open–close body.</li><li><b>V-shape:</b> a local trough relative to neighbouring candles; candidate zone is that pivot candle's open–close body.</li><li><b>Open-Close:</b> a comparatively large candle body versus recent bodies; its open–close body becomes a candidate zone.</li><li><b>Line mode:</b> finds peaks/troughs using closing prices, then marks the pivot candle's body zone.</li><li>Candidate proximity is measured against the latest returned candle close. Historical zones are not proof of a future rejection.</li></ul></div></section>
 <section class="panel"><div class="panel-head"><div><h2>Important limitations</h2></div></div><div class="panel-body"><ul class="rule-list"><li>These are provisional computational interpretations. They may not match every nuance of your personal SLK examples yet.</li><li>The feed refreshes only when you load/refresh it; this is not a tick-by-tick streaming feed.</li><li>No buy/sell calls, stop-losses, targets, or guaranteed rejections are generated.</li><li>Do not use the output for live trading until the detected zones have been compared against your chart examples and back-tested.</li></ul></div></section>
 </div>
+<section class="panel" id="slkRulebook">
+<div class="panel-head"><div><h2>SLK Method Rulebook</h2><p>Rules captured from your method so far. Detection remains provisional until the remaining definitions are confirmed.</p></div><span class="pill v">RULES IN PROGRESS</span></div>
+<div class="panel-body">
+<div class="two-col">
+<div><h3 style="margin:0 0 8px;font-size:13px;color:#c9b8ff">1 · Bias building</h3><ul class="rule-list">
+<li><b>Weekly:</b> study candle rejection and where the candle closes.</li>
+<li><b>Daily:</b> look for a sweep-and-break setup or an external breakout. Either can qualify independently.</li>
+<li><b>4H:</b> apply the same sweep-and-break or external-breakout rules. A breakout on the second day after a Daily rejection adds validation, but is not mandatory.</li>
+<li><b>Break confirmation:</b> candle body must close beyond the relevant external high or low. Wick-only breaks and internal breakouts do not qualify.</li>
+</ul></div>
+<div><h3 style="margin:0 0 8px;font-size:13px;color:#c9b8ff">2 · Setup confluence</h3><ul class="rule-list">
+<li>Find an unfilled three-candle imbalance (FVG).</li>
+<li>An A-shape, V-shape, or Open-Close key level must overlap inside the imbalance.</li>
+<li>Liquidity must be close to the imbalance. A single candle can count as liquidity, using its whole high-to-low range.</li>
+<li>A reaction from the overlapping key level can be a rejection candle or a strong move away.</li>
+<li>The reaction must then be confirmed by a body-close break of the relevant external high or low.</li>
+</ul></div>
+</div>
+<div class="notice" style="margin-bottom:0">Important: the current chart detector still uses simple candidate heuristics. This rulebook records your method; it does not yet mean every rule is automatically detected or validated by the scanner.</div>
+</div>
+</section>
 <div class="footer"><span>Independent SLK Radar-inspired project</span><span>Market data and candidate zones are for research only.</span></div>
 </main>
 <script>
