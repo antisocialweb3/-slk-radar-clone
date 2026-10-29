@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0d14">
+<title>SLK Radar — Market Scanner</title>
+<style>
+:root{color-scheme:dark;--bg:#090c12;--panel:#10151f;--panel2:#141b27;--line:#222b3a;--muted:#8b98ad;--text:#edf2fa;--purple:#a78bfa;--green:#35d49a;--red:#ff7185;--amber:#f3c969}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% -10%,#1a1732 0,transparent 42%),var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#0b0e16dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{display:flex;gap:11px;align-items:center;font-weight:800;letter-spacing:.2px}.logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#a78bfa,#6d5ce8);color:#0b0c13;font-weight:900;font-size:18px}.brand small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1.6px;margin-top:1px}
+.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px #f3c96977}
+main{max-width:1280px;margin:auto;padding:28px 22px 48px}.eyebrow{font-size:11px;color:var(--purple);font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.12;margin:8px 0 9px;letter-spacing:-1.2px}.sub{color:var(--muted);margin:0;max-width:680px}
+.topline{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:24px}.demo{border:1px solid #66522b;color:var(--amber);background:#30271566;border-radius:8px;padding:8px 11px;font-size:11px;white-space:nowrap}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.metric,.panel{background:linear-gradient(145deg,#121823,#0e131c);border:1px solid var(--line);border-radius:14px}.metric{padding:16px}.metric-label{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}.metric-value{font-size:25px;font-weight:750;margin:7px 0 3px;letter-spacing:-.6px}.metric-note{font-size:11px;color:var(--muted)}
+.panel{overflow:hidden}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:15px;border-bottom:1px solid var(--line);flex-wrap:wrap}.filters{display:flex;gap:7px;flex-wrap:wrap}.filter,select,input{background:#0b1018;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:12px}.filter{cursor:pointer;color:var(--muted)}.filter.active{background:#2a2148;border-color:#7059ba;color:#d9ceff}.search{width:min(100%,220px)}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:680px}th{text-align:left;color:#7e8aa0;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:750;padding:13px 16px;background:#0c1119}td{padding:15px 16px;border-top:1px solid #1b2431;font-size:12px}tbody tr:hover{background:#171e2b}.asset{font-weight:750;font-size:13px}.asset-sub{display:block;font-size:10px;color:var(--muted);margin-top:2px}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:6px;padding:5px 8px;font-size:10px;font-weight:800;letter-spacing:.4px}.bull{color:var(--green);background:#123329}.bear{color:var(--red);background:#351a25}.wait{color:var(--amber);background:#352c18}.muted{color:var(--muted)}.level{font-variant-numeric:tabular-nums;font-weight:650}.empty{padding:36px;text-align:center;color:var(--muted);display:none}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#6f7d92;font-size:11px;padding:15px 2px}
+@media(max-width:700px){header{padding:0 15px}.status .status-copy{display:none}main{padding:23px 13px 35px}.topline{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.metric{padding:13px}.metric-value{font-size:22px}.toolbar{align-items:stretch}.search{width:100%}.toolbar-right{width:100%}.toolbar-right input{width:100%}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">S</div><div>SLK RADAR<small>MARKET STRUCTURE SCANNER</small></div></div><div class="status"><span class="dot"></span><span class="status-copy">Prototype mode · Live feeds not connected</span></div></header>
+<main>
+<div class="topline"><div><div class="eyebrow">Market intelligence</div><h1>Find the move before it moves.</h1><p class="sub">A multi-market radar for higher-timeframe levels, liquidity sweeps and lower-timeframe structure confirmation.</p></div><div class="demo">⚠ DEMO DATA — NOT LIVE SIGNALS</div></div>
+<section class="metrics">
+<div class="metric"><div class="metric-label">Markets tracked</div><div class="metric-value" id="marketCount">12</div><div class="metric-note">Sample watchlist</div></div>
+<div class="metric"><div class="metric-label">Bullish setups</div><div class="metric-value" id="bullCount">4</div><div class="metric-note">Illustrative only</div></div>
+<div class="metric"><div class="metric-label">Bearish setups</div><div class="metric-value" id="bearCount">3</div><div class="metric-note">Illustrative only</div></div>
+<div class="metric"><div class="metric-label">Confirmed today</div><div class="metric-value">—</div><div class="metric-note">Requires live data + rule validation</div></div>
+</section>
+<section class="panel">
+<div class="toolbar"><div class="filters" id="filters"><button class="filter active" data-filter="All">All markets</button><button class="filter" data-filter="Forex">Forex</button><button class="filter" data-filter="Metals">Metals</button><button class="filter" data-filter="Crypto">Crypto</button><button class="filter" data-filter="Indices">Indices</button></div><div class="toolbar-right"><input class="search" id="search" placeholder="Search symbol…" aria-label="Search symbol"></div></div>
+<div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Market</th><th>HTF bias</th><th>Setup status</th><th>Reference level</th><th>Timeframes</th></tr></thead><tbody id="rows"></tbody></table><div class="empty" id="empty">No instruments match your search.</div></div>
+</section>
+<div class="footer"><span>SLK Radar-inspired independent prototype</span><span>Signals are examples, not financial advice.</span></div>
+</main>
+<script>
+const instruments=[
+{symbol:"XAUUSD",name:"Gold / US Dollar",market:"Metals",bias:"Bullish",status:"Watching",level:"2,712.40",tf:"D1 → H4"},
+{symbol:"EURUSD",name:"Euro / US Dollar",market:"Forex",bias:"Bearish",status:"Watching",level:"1.08420",tf:"D1 → H4"},
+{symbol:"GBPUSD",name:"Pound / US Dollar",market:"Forex",bias:"Bullish",status:"Confirming",level:"1.29650",tf:"D1 → H4"},
+{symbol:"BTCUSDT",name:"Bitcoin / Tether",market:"Crypto",bias:"Bullish",status:"Watching",level:"67,420.00",tf:"W1 → D1"},
+{symbol:"ETHUSDT",name:"Ethereum / Tether",market:"Crypto",bias:"Bearish",status:"Watching",level:"2,580.00",tf:"W1 → D1"},
+{symbol:"USDJPY",name:"US Dollar / Yen",market:"Forex",bias:"Bearish",status:"Confirming",level:"151.800",tf:"D1 → H4"},
+{symbol:"NAS100",name:"Nasdaq 100",market:"Indices",bias:"Bullish",status:"Watching",level:"20,115.0",tf:"D1 → H4"},
+{symbol:"US30",name:"Dow Jones",market:"Indices",bias:"Neutral",status:"Waiting",level:"43,220.0",tf:"D1 → H4"},
+{symbol:"SOLUSDT",name:"Solana / Tether",market:"Crypto",bias:"Bullish",status:"Confirming",level:"164.20",tf:"W1 → D1"},
+{symbol:"AUDUSD",name:"Australian Dollar / US Dollar",market:"Forex",bias:"Neutral",status:"Waiting",level:"0.65340",tf:"D1 → H4"},
+{symbol:"XAGUSD",name:"Silver / US Dollar",market:"Metals",bias:"Bearish",status:"Watching",level:"31.420",tf:"D1 → H4"},
+{symbol:"BNBUSDT",name:"BNB / Tether",market:"Crypto",bias:"Neutral",status:"Waiting",level:"590.00",tf:"W1 → D1"}
+];
+let activeFilter="All";
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){const q=document.getElementById("search").value.trim().toLowerCase();const data=instruments.filter(x=>(activeFilter==="All"||x.market===activeFilter)&&(x.symbol.toLowerCase().includes(q)||x.name.toLowerCase().includes(q)));document.getElementById("rows").innerHTML=data.map(x=>'<tr><td><span class="asset">'+esc(x.symbol)+'</span><span class="asset-sub">'+esc(x.name)+'</span></td><td>'+esc(x.market)+'</td><td><span class="pill '+(x.bias==="Bullish"?"bull":x.bias==="Bearish"?"bear":"wait")+'">'+esc(x.bias.toUpperCase())+'</span></td><td><span class="pill '+(x.status==="Confirming"?"bull":x.status==="Watching"?"wait":"")+'">'+esc(x.status.toUpperCase())+'</span></td><td class="level">'+esc(x.level)+'</td><td class="muted">'+esc(x.tf)+'</td></tr>').join("");document.getElementById("empty").style.display=data.length?"none":"block"}
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-filter]");if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.toggle("active",x===b));render()});document.getElementById("search").addEventListener("input",render);render();
+</script>
+</body>
+</html>
