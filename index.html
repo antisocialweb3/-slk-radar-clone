@@ -131,13 +131,21 @@ function renderImbalances(){
 }
 function renderChart(){
  if(!candles.length){$("chart").innerHTML='<div class="empty">Your XAU/USD chart will appear here after a successful data load.</div>';return}
- const w=1000,h=300,pad={l:58,r:22,t:20,b:30};const vals=candles.map(c=>c.close),min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
- const x=i=>pad.l+i*(w-pad.l-pad.r)/Math.max(1,vals.length-1),y=v=>pad.t+(max-v)*(h-pad.t-pad.b)/range;
- const points=vals.map((v,i)=>x(i)+","+y(v)).join(" ");
+ const mode=$("pivotMode").value,w=1000,h=340,pad={l:68,r:22,t:20,b:32};
+ const min=Math.min(...candles.map(c=>mode==="line"?c.close:c.low)),max=Math.max(...candles.map(c=>mode==="line"?c.close:c.high)),range=max-min||1;
+ const x=i=>pad.l+i*(w-pad.l-pad.r)/Math.max(1,candles.length-1),y=v=>pad.t+(max-v)*(h-pad.t-pad.b)/range;
+ const vals=candles.map(c=>c.close),points=vals.map((v,i)=>x(i)+","+y(v)).join(" ");
  let grid="";for(let i=0;i<5;i++){const v=min+range*i/4,yy=y(v);grid+='<line x1="'+pad.l+'" y1="'+yy+'" x2="'+(w-pad.r)+'" y2="'+yy+'" stroke="#202938" stroke-width="1"/><text x="'+(pad.l-9)+'" y="'+(yy+4)+'" text-anchor="end" fill="#7e8aa0" font-size="11">'+fmt(v,2)+'</text>'}
  let markers="";for(const lev of levels){const yy=y((lev.low+lev.high)/2);if(yy<pad.t||yy>h-pad.b)continue;const col=lev.type==="A-shape"?"#ff7185":lev.type==="V-shape"?"#35d49a":"#f3c969";markers+='<line x1="'+pad.l+'" y1="'+yy+'" x2="'+(w-pad.r)+'" y2="'+yy+'" stroke="'+col+'" stroke-width="1.2" stroke-dasharray="5 5" opacity=".8"/>'}
+ let priceShape="";
+ if(mode==="line"){
+  priceShape='<polyline fill="none" stroke="#b8a4ff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="'+points+'"/><circle cx="'+x(vals.length-1)+'" cy="'+y(vals[vals.length-1])+'" r="4" fill="#b8a4ff"/>';
+ }else{
+  const step=(w-pad.l-pad.r)/Math.max(1,candles.length-1),bodyW=Math.max(2,Math.min(8,step*.58));
+  priceShape=candles.map((c,i)=>{const xx=x(i),up=c.close>=c.open,col=up?"#35d49a":"#ff7185",top=y(Math.max(c.open,c.close)),bottom=y(Math.min(c.open,c.close)),bh=Math.max(1,bottom-top);return '<line x1="'+xx+'" y1="'+y(c.high)+'" x2="'+xx+'" y2="'+y(c.low)+'" stroke="'+col+'" stroke-width="1.2"/><rect x="'+(xx-bodyW/2)+'" y="'+top+'" width="'+bodyW+'" height="'+bh+'" fill="'+col+'" rx=".5"/>'}).join("");
+ }
  const first=candles[0].datetime,last=candles[candles.length-1].datetime;
- $("chart").innerHTML='<svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="XAU USD closing price history and candidate key-level lines">'+grid+markers+'<polyline fill="none" stroke="#b8a4ff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="'+points+'"/><circle cx="'+x(vals.length-1)+'" cy="'+y(vals[vals.length-1])+'" r="4" fill="#b8a4ff"/><text x="'+pad.l+'" y="'+(h-8)+'" fill="#7e8aa0" font-size="11">'+esc(first)+'</text><text x="'+(w-pad.r)+'" y="'+(h-8)+'" text-anchor="end" fill="#7e8aa0" font-size="11">'+esc(last)+'</text></svg>';
+ $("chart").innerHTML='<svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="XAU USD '+(mode==="line"?"closing price line chart":"candlestick chart")+' with candidate key-level lines">'+grid+markers+priceShape+'<text x="'+pad.l+'" y="'+(h-8)+'" fill="#7e8aa0" font-size="11">'+esc(first)+'</text><text x="'+(w-pad.r)+'" y="'+(h-8)+'" text-anchor="end" fill="#7e8aa0" font-size="11">'+esc(last)+'</text></svg>';
 }
 function renderLevels(){
  const f=$("shapeFilter").value;const filtered=levels.filter(l=>f==="All"||l.type===f);
