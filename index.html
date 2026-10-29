@@ -1,59 +1,135 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0a0d14">
-<title>SLK Radar — Market Scanner</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090c12">
+<title>SLK Radar — XAUUSD Key-Level Scanner</title>
 <style>
 :root{color-scheme:dark;--bg:#090c12;--panel:#10151f;--panel2:#141b27;--line:#222b3a;--muted:#8b98ad;--text:#edf2fa;--purple:#a78bfa;--green:#35d49a;--red:#ff7185;--amber:#f3c969}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% -10%,#1a1732 0,transparent 42%),var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#0b0e16dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
-.brand{display:flex;gap:11px;align-items:center;font-weight:800;letter-spacing:.2px}.logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#a78bfa,#6d5ce8);color:#0b0c13;font-weight:900;font-size:18px}.brand small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1.6px;margin-top:1px}
-.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px #f3c96977}
-main{max-width:1280px;margin:auto;padding:28px 22px 48px}.eyebrow{font-size:11px;color:var(--purple);font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
-h1{font-size:clamp(26px,4vw,38px);line-height:1.12;margin:8px 0 9px;letter-spacing:-1.2px}.sub{color:var(--muted);margin:0;max-width:680px}
-.topline{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:24px}.demo{border:1px solid #66522b;color:var(--amber);background:#30271566;border-radius:8px;padding:8px 11px;font-size:11px;white-space:nowrap}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}.metric,.panel{background:linear-gradient(145deg,#121823,#0e131c);border:1px solid var(--line);border-radius:14px}.metric{padding:16px}.metric-label{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}.metric-value{font-size:25px;font-weight:750;margin:7px 0 3px;letter-spacing:-.6px}.metric-note{font-size:11px;color:var(--muted)}
-.panel{overflow:hidden}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:15px;border-bottom:1px solid var(--line);flex-wrap:wrap}.filters{display:flex;gap:7px;flex-wrap:wrap}.filter,select,input{background:#0b1018;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:12px}.filter{cursor:pointer;color:var(--muted)}.filter.active{background:#2a2148;border-color:#7059ba;color:#d9ceff}.search{width:min(100%,220px)}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:680px}th{text-align:left;color:#7e8aa0;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:750;padding:13px 16px;background:#0c1119}td{padding:15px 16px;border-top:1px solid #1b2431;font-size:12px}tbody tr:hover{background:#171e2b}.asset{font-weight:750;font-size:13px}.asset-sub{display:block;font-size:10px;color:var(--muted);margin-top:2px}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:6px;padding:5px 8px;font-size:10px;font-weight:800;letter-spacing:.4px}.bull{color:var(--green);background:#123329}.bear{color:var(--red);background:#351a25}.wait{color:var(--amber);background:#352c18}.muted{color:var(--muted)}.level{font-variant-numeric:tabular-nums;font-weight:650}.empty{padding:36px;text-align:center;color:var(--muted);display:none}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#6f7d92;font-size:11px;padding:15px 2px}
-@media(max-width:700px){header{padding:0 15px}.status .status-copy{display:none}main{padding:23px 13px 35px}.topline{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.metric{padding:13px}.metric-value{font-size:22px}.toolbar{align-items:stretch}.search{width:100%}.toolbar-right{width:100%}.toolbar-right input{width:100%}}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% -10%,#1a1732 0,transparent 42%),var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{min-height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:#0b0e16e8;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px);gap:14px}.brand{display:flex;gap:11px;align-items:center;font-weight:800;letter-spacing:.2px}.logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#a78bfa,#6d5ce8);color:#0b0c13;font-weight:900;font-size:18px}.brand small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1.6px}.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--amber)}main{max-width:1240px;margin:auto;padding:26px 20px 48px}.topline{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:22px}.eyebrow{font-size:11px;color:var(--purple);font-weight:800;letter-spacing:1.8px;text-transform:uppercase}h1{font-size:clamp(26px,4vw,38px);line-height:1.12;margin:8px 0;letter-spacing:-1.2px}.sub{color:var(--muted);margin:0;max-width:720px}.badge{border:1px solid #66522b;color:var(--amber);background:#30271566;border-radius:8px;padding:8px 11px;font-size:11px;white-space:nowrap}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}.metric,.panel{background:linear-gradient(145deg,#121823,#0e131c);border:1px solid var(--line);border-radius:14px}.metric{padding:15px}.metric-label{font-size:10px;color:var(--muted);letter-spacing:.7px;text-transform:uppercase}.metric-value{font-size:clamp(20px,3vw,27px);font-weight:750;margin:6px 0 2px;letter-spacing:-.6px;overflow-wrap:anywhere}.metric-note{font-size:11px;color:var(--muted)}.panel{overflow:hidden;margin-bottom:15px}.panel-head{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.panel-head h2{font-size:14px;margin:0}.panel-head p{font-size:11px;color:var(--muted);margin:3px 0 0}.panel-body{padding:16px}.controls{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) auto;gap:10px;align-items:end}.field label{display:block;font-size:11px;color:var(--muted);margin:0 0 6px}.field input,.field select,.btn{width:100%;background:#0b1018;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px 11px;font:inherit;font-size:12px;min-width:0}.btn{cursor:pointer;font-weight:750;background:#2a2148;border-color:#7059ba;color:#e5dcff;white-space:nowrap}.btn.secondary{background:#141b27;border-color:var(--line);color:var(--text)}.help{font-size:11px;color:var(--muted);margin:10px 0 0}.notice{border:1px solid #514323;background:#211d14;color:#e9d6a2;padding:11px 13px;border-radius:9px;font-size:12px;margin:12px 0}.error{border-color:#5b2936;background:#27151c;color:#ffb6c1}.success{border-color:#1c5946;background:#10251e;color:#9df0ce}.price-row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}.big-price{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-1.3px;line-height:1.1}.price-caption{font-size:11px;color:var(--muted);margin-top:5px}.chart-wrap{width:100%;overflow:hidden;background:#0b1018;border:1px solid var(--line);border-radius:10px;margin-top:14px}.chart-wrap svg{display:block;width:100%;height:auto;min-height:180px}.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:10px;margin-top:10px}.legend span:before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--purple);margin-right:5px}.legend .low:before{background:var(--green)}.legend .high:before{background:var(--red)}.legend .openclose:before{background:var(--amber)}.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.toolbar select{background:#0b1018;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 10px;font:inherit;font-size:12px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px}th{text-align:left;color:#7e8aa0;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:750;padding:12px 14px;background:#0c1119}td{padding:13px 14px;border-top:1px solid #1b2431;font-size:12px}tbody tr:hover{background:#171e2b}.pill{display:inline-flex;align-items:center;border-radius:6px;padding:4px 7px;font-size:10px;font-weight:800;letter-spacing:.3px}.a{color:#ffb3bf;background:#351a25}.v{color:#9df0ce;background:#123329}.oc{color:#f3d98b;background:#352c18}.level{font-variant-numeric:tabular-nums;font-weight:700}.muted{color:var(--muted)}.empty{padding:28px;text-align:center;color:var(--muted)}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px}.rule-list{margin:0;padding-left:18px;color:var(--muted);font-size:12px}.rule-list li{margin:7px 0}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#6f7d92;font-size:11px;padding:15px 2px}.hidden{display:none!important}
+@media(max-width:760px){header{padding:11px 14px}.status .status-copy{display:none}main{padding:20px 12px 34px}.topline{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:12px}.controls{grid-template-columns:1fr}.controls .btn{width:100%}.two-col{grid-template-columns:1fr}.panel-body{padding:13px}.panel-head{padding:13px}}
 </style>
 </head>
 <body>
-<header><div class="brand"><div class="logo">S</div><div>SLK RADAR<small>MARKET STRUCTURE SCANNER</small></div></div><div class="status"><span class="dot"></span><span class="status-copy">Prototype mode · Live feeds not connected</span></div></header>
+<header><div class="brand"><div class="logo">S</div><div>SLK RADAR<small>XAUUSD KEY-LEVEL SCANNER</small></div></div><div class="status"><span class="dot" id="statusDot"></span><span id="statusText" class="status-copy">Waiting for data connection</span></div></header>
 <main>
-<div class="topline"><div><div class="eyebrow">Market intelligence</div><h1>Find the move before it moves.</h1><p class="sub">A multi-market radar for higher-timeframe levels, liquidity sweeps and lower-timeframe structure confirmation.</p></div><div class="demo">⚠ DEMO DATA — NOT LIVE SIGNALS</div></div>
+<div class="topline"><div><div class="eyebrow">Market intelligence · Gold</div><h1>Find the level. Wait for the reaction.</h1><p class="sub">Live XAU/USD candles with provisional A-shape, V-shape and Open-Close candidate zones. This is a rule-based research tool, not an automatic trade signal.</p></div><div class="badge" id="dataBadge">CONNECT DATA TO BEGIN</div></div>
 <section class="metrics">
-<div class="metric"><div class="metric-label">Markets tracked</div><div class="metric-value" id="marketCount">12</div><div class="metric-note">Sample watchlist</div></div>
-<div class="metric"><div class="metric-label">Bullish setups</div><div class="metric-value" id="bullCount">4</div><div class="metric-note">Illustrative only</div></div>
-<div class="metric"><div class="metric-label">Bearish setups</div><div class="metric-value" id="bearCount">3</div><div class="metric-note">Illustrative only</div></div>
-<div class="metric"><div class="metric-label">Confirmed today</div><div class="metric-value">—</div><div class="metric-note">Requires live data + rule validation</div></div>
+<div class="metric"><div class="metric-label">XAU/USD price</div><div class="metric-value" id="metricPrice">—</div><div class="metric-note" id="metricPriceNote">Connect a market-data key</div></div>
+<div class="metric"><div class="metric-label">Candidate levels</div><div class="metric-value" id="metricLevels">—</div><div class="metric-note">Detected from loaded candles</div></div>
+<div class="metric"><div class="metric-label">Nearest candidate</div><div class="metric-value" id="metricNearest">—</div><div class="metric-note" id="metricNearestNote">Waiting for candles</div></div>
+<div class="metric"><div class="metric-label">Candles loaded</div><div class="metric-value" id="metricCandles">0</div><div class="metric-note" id="metricUpdated">Not connected</div></div>
 </section>
 <section class="panel">
-<div class="toolbar"><div class="filters" id="filters"><button class="filter active" data-filter="All">All markets</button><button class="filter" data-filter="Forex">Forex</button><button class="filter" data-filter="Metals">Metals</button><button class="filter" data-filter="Crypto">Crypto</button><button class="filter" data-filter="Indices">Indices</button></div><div class="toolbar-right"><input class="search" id="search" placeholder="Search symbol…" aria-label="Search symbol"></div></div>
-<div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Market</th><th>HTF bias</th><th>Setup status</th><th>Reference level</th><th>Timeframes</th></tr></thead><tbody id="rows"></tbody></table><div class="empty" id="empty">No instruments match your search.</div></div>
+<div class="panel-head"><div><h2>Connect live market data</h2><p>Uses Twelve Data's XAU/USD time-series API. Your key stays in this browser and is never written to this GitHub repository.</p></div></div>
+<div class="panel-body">
+<div class="controls">
+<div class="field"><label for="apiKey">Twelve Data API key</label><input id="apiKey" type="password" autocomplete="off" placeholder="Paste your API key"></div>
+<div class="field"><label for="interval">Candle timeframe</label><select id="interval"><option value="1day">Daily (1 day)</option><option value="4h">4 hours</option><option value="1h">1 hour</option><option value="15min">15 minutes</option></select></div>
+<button class="btn" id="connectBtn">Load XAU/USD</button>
+</div>
+<p class="help">Get a key from <a href="https://twelvedata.com/" target="_blank" rel="noopener noreferrer" style="color:#c9b8ff">Twelve Data</a>. Provider plan limits and symbol access apply. Use a key you are comfortable using in a browser; client-side keys are visible to anyone using browser developer tools. Do not paste exchange passwords or wallet secrets.</p>
+<div id="connectionMessage" class="notice">No live data loaded yet. The scanner will not display fictional prices as live prices.</div>
+</div>
 </section>
-<div class="footer"><span>SLK Radar-inspired independent prototype</span><span>Signals are examples, not financial advice.</span></div>
+<section class="panel">
+<div class="panel-head"><div><h2>XAU/USD price history</h2><p id="chartSubtitle">Connect data to load candles and scan candidate levels.</p></div><button class="btn secondary" id="refreshBtn" disabled>Refresh</button></div>
+<div class="panel-body">
+<div class="price-row"><div><div class="big-price" id="currentPrice">—</div><div class="price-caption" id="currentPriceCaption">Latest returned candle close · not necessarily a streaming quote</div></div><div class="muted" id="lastCandleDate"></div></div>
+<div class="chart-wrap" id="chart"><div class="empty">Your XAU/USD chart will appear here after a successful data load.</div></div>
+<div class="legend"><span>Close price</span><span class="low">V-shape candidates</span><span class="high">A-shape candidates</span><span class="openclose">Open-Close candidates</span></div>
+</div>
+</section>
+<section class="panel">
+<div class="panel-head"><div><h2>Key-level candidates</h2><p>Zones use candle body (open–close), excluding wick extremes. Treat these as candidates to inspect, not validated trade entries.</p></div><div class="toolbar"><select id="shapeFilter" aria-label="Filter level type"><option value="All">All types</option><option value="A-shape">A-shape</option><option value="V-shape">V-shape</option><option value="Open-Close">Open-Close</option></select><select id="pivotMode" aria-label="Pivot representation"><option value="candle">Candle representation</option><option value="line">Line representation (close)</option></select></div></div>
+<div class="table-wrap"><table><thead><tr><th>Type</th><th>Body zone (low–high)</th><th>Pivot candle</th><th>Distance to price</th><th>Context</th></tr></thead><tbody id="levelRows"><tr><td colspan="5" class="empty">Connect live data to detect candidate zones.</td></tr></tbody></table></div>
+</section>
+<div class="two-col">
+<section class="panel"><div class="panel-head"><div><h2>Working detection rules</h2><p>Transparent, adjustable heuristics for the first version.</p></div></div><div class="panel-body"><ul class="rule-list"><li><b>A-shape:</b> a local peak relative to neighbouring candles; candidate zone is that pivot candle's open–close body.</li><li><b>V-shape:</b> a local trough relative to neighbouring candles; candidate zone is that pivot candle's open–close body.</li><li><b>Open-Close:</b> a comparatively large candle body versus recent bodies; its open–close body becomes a candidate zone.</li><li><b>Line mode:</b> finds peaks/troughs using closing prices, then marks the pivot candle's body zone.</li><li>Candidate proximity is measured against the latest returned candle close. Historical zones are not proof of a future rejection.</li></ul></div></section>
+<section class="panel"><div class="panel-head"><div><h2>Important limitations</h2></div></div><div class="panel-body"><ul class="rule-list"><li>These are provisional computational interpretations. They may not match every nuance of your personal SLK examples yet.</li><li>The feed refreshes only when you load/refresh it; this is not a tick-by-tick streaming feed.</li><li>No buy/sell calls, stop-losses, targets, or guaranteed rejections are generated.</li><li>Do not use the output for live trading until the detected zones have been compared against your chart examples and back-tested.</li></ul></div></section>
+</div>
+<div class="footer"><span>Independent SLK Radar-inspired project</span><span>Market data and candidate zones are for research only.</span></div>
 </main>
 <script>
-const instruments=[
-{symbol:"XAUUSD",name:"Gold / US Dollar",market:"Metals",bias:"Bullish",status:"Watching",level:"2,712.40",tf:"D1 → H4"},
-{symbol:"EURUSD",name:"Euro / US Dollar",market:"Forex",bias:"Bearish",status:"Watching",level:"1.08420",tf:"D1 → H4"},
-{symbol:"GBPUSD",name:"Pound / US Dollar",market:"Forex",bias:"Bullish",status:"Confirming",level:"1.29650",tf:"D1 → H4"},
-{symbol:"BTCUSDT",name:"Bitcoin / Tether",market:"Crypto",bias:"Bullish",status:"Watching",level:"67,420.00",tf:"W1 → D1"},
-{symbol:"ETHUSDT",name:"Ethereum / Tether",market:"Crypto",bias:"Bearish",status:"Watching",level:"2,580.00",tf:"W1 → D1"},
-{symbol:"USDJPY",name:"US Dollar / Yen",market:"Forex",bias:"Bearish",status:"Confirming",level:"151.800",tf:"D1 → H4"},
-{symbol:"NAS100",name:"Nasdaq 100",market:"Indices",bias:"Bullish",status:"Watching",level:"20,115.0",tf:"D1 → H4"},
-{symbol:"US30",name:"Dow Jones",market:"Indices",bias:"Neutral",status:"Waiting",level:"43,220.0",tf:"D1 → H4"},
-{symbol:"SOLUSDT",name:"Solana / Tether",market:"Crypto",bias:"Bullish",status:"Confirming",level:"164.20",tf:"W1 → D1"},
-{symbol:"AUDUSD",name:"Australian Dollar / US Dollar",market:"Forex",bias:"Neutral",status:"Waiting",level:"0.65340",tf:"D1 → H4"},
-{symbol:"XAGUSD",name:"Silver / US Dollar",market:"Metals",bias:"Bearish",status:"Watching",level:"31.420",tf:"D1 → H4"},
-{symbol:"BNBUSDT",name:"BNB / Tether",market:"Crypto",bias:"Neutral",status:"Waiting",level:"590.00",tf:"W1 → D1"}
-];
-let activeFilter="All";
+const $=id=>document.getElementById(id);
+let candles=[],levels=[],lastPrice=null;
+const fmt=(n,d=2)=>Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function render(){const q=document.getElementById("search").value.trim().toLowerCase();const data=instruments.filter(x=>(activeFilter==="All"||x.market===activeFilter)&&(x.symbol.toLowerCase().includes(q)||x.name.toLowerCase().includes(q)));document.getElementById("rows").innerHTML=data.map(x=>'<tr><td><span class="asset">'+esc(x.symbol)+'</span><span class="asset-sub">'+esc(x.name)+'</span></td><td>'+esc(x.market)+'</td><td><span class="pill '+(x.bias==="Bullish"?"bull":x.bias==="Bearish"?"bear":"wait")+'">'+esc(x.bias.toUpperCase())+'</span></td><td><span class="pill '+(x.status==="Confirming"?"bull":x.status==="Watching"?"wait":"")+'">'+esc(x.status.toUpperCase())+'</span></td><td class="level">'+esc(x.level)+'</td><td class="muted">'+esc(x.tf)+'</td></tr>').join("");document.getElementById("empty").style.display=data.length?"none":"block"}
-document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-filter]");if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.toggle("active",x===b));render()});document.getElementById("search").addEventListener("input",render);render();
+function setMessage(text,type=""){const el=$("connectionMessage");el.className="notice"+(type?" "+type:"");el.textContent=text}
+function status(text,ok=false){$("statusText").textContent=text;$("statusDot").style.background=ok?"var(--green)":"var(--amber)"}
+function saveKey(){try{sessionStorage.setItem("slk_twelvedata_key",$("apiKey").value.trim())}catch(e){}}
+function loadSavedKey(){try{$("apiKey").value=sessionStorage.getItem("slk_twelvedata_key")||""}catch(e){}}
+function analyze(data,mode){
+ const out=[],n=data.length,window=3;
+ const val=(c,k)=>mode==="line"?c.close:c[k];
+ for(let i=window;i<n-window;i++){
+  const c=data[i],left=data.slice(i-window,i),right=data.slice(i+1,i+window+1);
+  const hi=val(c,"high"),lo=val(c,"low");
+  const isPeak=left.every(x=>hi>val(x,"high"))&&right.every(x=>hi>=val(x,"high"));
+  const isTrough=left.every(x=>lo<val(x,"low"))&&right.every(x=>lo<=val(x,"low"));
+  const bodyLow=Math.min(c.open,c.close),bodyHigh=Math.max(c.open,c.close);
+  if(isPeak)out.push({type:"A-shape",low:bodyLow,high:bodyHigh,date:c.datetime,index:i,context:"Local peak"});
+  if(isTrough)out.push({type:"V-shape",low:bodyLow,high:bodyHigh,date:c.datetime,index:i,context:"Local trough"});
+ }
+ for(let i=10;i<n;i++){
+  const c=data[i],body=Math.abs(c.close-c.open);
+  const recent=data.slice(Math.max(0,i-10),i).map(x=>Math.abs(x.close-x.open)).sort((a,b)=>a-b);
+  const median=recent.length?recent[Math.floor(recent.length/2)]:0;
+  if(median>0&&body>=median*1.8&&body>0)out.push({type:"Open-Close",low:Math.min(c.open,c.close),high:Math.max(c.open,c.close),date:c.datetime,index:i,context:"Large body vs recent median"});
+ }
+ const dedup=new Map();for(const x of out){const key=[x.type,x.index].join("-");dedup.set(key,x)}
+ return [...dedup.values()].sort((a,b)=>b.index-a.index).slice(0,100);
+}
+function renderChart(){
+ if(!candles.length){$("chart").innerHTML='<div class="empty">Your XAU/USD chart will appear here after a successful data load.</div>';return}
+ const w=1000,h=300,pad={l:58,r:22,t:20,b:30};const vals=candles.map(c=>c.close),min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
+ const x=i=>pad.l+i*(w-pad.l-pad.r)/Math.max(1,vals.length-1),y=v=>pad.t+(max-v)*(h-pad.t-pad.b)/range;
+ const points=vals.map((v,i)=>x(i)+","+y(v)).join(" ");
+ let grid="";for(let i=0;i<5;i++){const v=min+range*i/4,yy=y(v);grid+='<line x1="'+pad.l+'" y1="'+yy+'" x2="'+(w-pad.r)+'" y2="'+yy+'" stroke="#202938" stroke-width="1"/><text x="'+(pad.l-9)+'" y="'+(yy+4)+'" text-anchor="end" fill="#7e8aa0" font-size="11">'+fmt(v,2)+'</text>'}
+ let markers="";for(const lev of levels){const yy=y((lev.low+lev.high)/2);if(yy<pad.t||yy>h-pad.b)continue;const col=lev.type==="A-shape"?"#ff7185":lev.type==="V-shape"?"#35d49a":"#f3c969";markers+='<line x1="'+pad.l+'" y1="'+yy+'" x2="'+(w-pad.r)+'" y2="'+yy+'" stroke="'+col+'" stroke-width="1.2" stroke-dasharray="5 5" opacity=".8"/>'}
+ const first=candles[0].datetime,last=candles[candles.length-1].datetime;
+ $("chart").innerHTML='<svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="XAU USD closing price history and candidate key-level lines">'+grid+markers+'<polyline fill="none" stroke="#b8a4ff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="'+points+'"/><circle cx="'+x(vals.length-1)+'" cy="'+y(vals[vals.length-1])+'" r="4" fill="#b8a4ff"/><text x="'+pad.l+'" y="'+(h-8)+'" fill="#7e8aa0" font-size="11">'+esc(first)+'</text><text x="'+(w-pad.r)+'" y="'+(h-8)+'" text-anchor="end" fill="#7e8aa0" font-size="11">'+esc(last)+'</text></svg>';
+}
+function renderLevels(){
+ const f=$("shapeFilter").value;const filtered=levels.filter(l=>f==="All"||l.type===f);
+ if(!filtered.length){$("levelRows").innerHTML='<tr><td colspan="5" class="empty">No candidates of this type in the loaded history. Try another timeframe or pivot mode.</td></tr>';return}
+ $("levelRows").innerHTML=filtered.slice(0,50).map(l=>{const mid=(l.low+l.high)/2,dist=((mid-lastPrice)/lastPrice)*100,cls=l.type==="A-shape"?"a":l.type==="V-shape"?"v":"oc";return '<tr><td><span class="pill '+cls+'">'+esc(l.type)+'</span></td><td class="level">'+fmt(l.low,2)+' – '+fmt(l.high,2)+'</td><td>'+esc(l.date)+'</td><td class="level">'+(dist>=0?"+":"")+fmt(dist,2)+'%</td><td class="muted">'+esc(l.context)+'</td></tr>'}).join("");
+}
+function renderAll(){
+ if(!candles.length)return;
+ lastPrice=candles[candles.length-1].close;
+ $("metricPrice").textContent=fmt(lastPrice,2);$("currentPrice").textContent=fmt(lastPrice,2);
+ $("metricPriceNote").textContent="Latest candle close";$("lastCandleDate").textContent="Latest candle: "+candles[candles.length-1].datetime;
+ $("metricLevels").textContent=String(levels.length);$("metricCandles").textContent=String(candles.length);
+ $("metricUpdated").textContent="Loaded "+new Date().toLocaleTimeString();
+ const near=[...levels].sort((a,b)=>Math.abs((a.low+a.high)/2-lastPrice)-Math.abs((b.low+b.high)/2-lastPrice))[0];
+ $("metricNearest").textContent=near?fmt((near.low+near.high)/2,2):"—";$("metricNearestNote").textContent=near?near.type+" candidate":"No candidates found";
+ $("chartSubtitle").textContent=candles.length+" candles · "+$("interval").selectedOptions[0].text+" · lines show candidate body-zone midpoints";
+ $("dataBadge").textContent="DATA LOADED · "+$("interval").value.toUpperCase();$("dataBadge").style.borderColor="#1c5946";$("dataBadge").style.color="#9df0ce";
+ renderChart();renderLevels();
+}
+async function connect(){
+ const key=$("apiKey").value.trim();if(!key){setMessage("Paste your Twelve Data API key first. No key has been saved to the website source.","error");return}
+ saveKey();$("connectBtn").disabled=true;$("connectBtn").textContent="Loading…";status("Requesting market data");
+ try{
+  const interval=$("interval").value;
+  const url="https://api.twelvedata.com/time_series?symbol=XAU/USD&interval="+encodeURIComponent(interval)+"&outputsize=200&order=ASC&apikey="+encodeURIComponent(key);
+  const response=await fetch(url);let payload;try{payload=await response.json()}catch(e){throw new Error("The provider returned an unreadable response. Check the API key and provider access.")}
+  if(!response.ok||payload.status==="error"||payload.code||!Array.isArray(payload.values)){
+   const detail=payload.message||payload.msg||("HTTP "+response.status);
+   throw new Error(detail+" If your key is valid, check whether your Twelve Data plan supports the XAU/USD symbol and selected interval.")
+  }
+  const parsed=payload.values.map(v=>({datetime:v.datetime,open:Number(v.open),high:Number(v.high),low:Number(v.low),close:Number(v.close)})).filter(c=>[c.open,c.high,c.low,c.close].every(Number.isFinite)).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+  if(parsed.length<10)throw new Error("The provider returned fewer than 10 usable candles. Try another timeframe or check symbol access.");
+  candles=parsed;levels=analyze(candles,$("pivotMode").value);renderAll();
+  setMessage("Loaded "+candles.length+" candles from Twelve Data. Last candle close: "+fmt(candles[candles.length-1].close,2)+". This may be delayed and is not a tick-by-tick quote.","success");
+  status("Market data loaded",true);$("refreshBtn").disabled=false;
+ }catch(err){setMessage("Could not load XAU/USD: "+err.message,"error");status("Data connection needs attention")}
+ finally{$("connectBtn").disabled=false;$("connectBtn").textContent="Load XAU/USD"}
+}
+$("connectBtn").addEventListener("click",connect);$("refreshBtn").addEventListener("click",connect);
+$("shapeFilter").addEventListener("change",renderLevels);
+$("pivotMode").addEventListener("change",()=>{if(candles.length){levels=analyze(candles,$("pivotMode").value);renderAll()}});
+$("interval").addEventListener("change",()=>{if(candles.length)connect()});
+loadSavedKey();
 </script>
-</body>
-</html>
+</body></html>
