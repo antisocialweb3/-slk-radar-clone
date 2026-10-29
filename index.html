@@ -28,7 +28,7 @@
 <button class="btn" id="connectBtn">Load XAU/USD</button>
 </div>
 <p class="help">Get a key from <a href="https://twelvedata.com/" target="_blank" rel="noopener noreferrer" style="color:#c9b8ff">Twelve Data</a>. Provider plan limits and symbol access apply. Use a key you are comfortable using in a browser; client-side keys are visible to anyone using browser developer tools. Do not paste exchange passwords or wallet secrets.</p>
-<div id="connectionMessage" class="notice">No live data loaded yet. The scanner will not display fictional prices as live prices.</div><div id="debugMessage" class="help" role="status" aria-live="polite">Scanner ready. Enter your API key and tap Load XAU/USD.</div>
+<div id="debugMessage" class="notice" role="status" aria-live="polite" style="border-color:#6659a8;background:#19172a;color:#e5dcff">SLK Radar update check: version 30e681d loaded. Tap Load XAU/USD to check the connection.</div><div id="connectionMessage" class="notice">No live data loaded yet. The scanner will not display fictional prices as live prices.</div>
 </div>
 </section>
 <section class="panel">
@@ -109,9 +109,9 @@ function renderAll(){
 }
 async function connect(){
  const key=$("apiKey").value.trim();
- $("debugMessage").textContent="Button tapped. Checking API key…";
+ $("debugMessage").className="notice";$("debugMessage").textContent="Button tapped. Checking API key…";
  if(!key){setMessage("Paste your Twelve Data API key first. No key has been saved to the website source.","error");$("debugMessage").textContent="No API key entered.";return}
- saveKey();$("connectBtn").disabled=true;$("connectBtn").textContent="Loading…";status("Requesting market data");$("debugMessage").textContent="Request started. Waiting for Twelve Data…";
+ saveKey();$("connectBtn").disabled=true;$("connectBtn").textContent="Loading…";status("Requesting market data");$("debugMessage").className="notice";$("debugMessage").textContent="Request started. Waiting for Twelve Data…";
  try{
   const interval=$("interval").value;
   const url="https://api.twelvedata.com/time_series?symbol=XAU/USD&interval="+encodeURIComponent(interval)+"&outputsize=200&order=ASC&apikey="+encodeURIComponent(key);
@@ -126,8 +126,8 @@ async function connect(){
   if(parsed.length<10)throw new Error("The provider returned fewer than 10 usable candles. Try another timeframe or check symbol access.");
   candles=parsed;levels=analyze(candles,$("pivotMode").value);renderAll();
   setMessage("Loaded "+candles.length+" candles from Twelve Data. Last candle close: "+fmt(candles[candles.length-1].close,2)+". This may be delayed and is not a tick-by-tick quote.","success");
-  status("Market data loaded",true);$("refreshBtn").disabled=false;$("debugMessage").textContent="Success: button, JavaScript and API request are working.";
- }catch(err){setMessage("Could not load XAU/USD: "+err.message,"error");status("Data connection needs attention");$("debugMessage").textContent="Request failed: "+err.message}
+  status("Market data loaded",true);$("refreshBtn").disabled=false;$("debugMessage").className="notice success";$("debugMessage").textContent="Success: button, JavaScript and API request are working.";
+ }catch(err){setMessage("Could not load XAU/USD: "+err.message,"error");status("Data connection needs attention");$("debugMessage").className="notice error";$("debugMessage").textContent="Request failed: "+err.message}
  finally{$("connectBtn").disabled=false;$("connectBtn").textContent="Load XAU/USD"}
 }
 window.addEventListener("error",e=>{const msg="Page script error: "+(e.message||"unknown error");const d=$("debugMessage");if(d)d.textContent=msg;});
